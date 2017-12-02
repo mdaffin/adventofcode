@@ -13,36 +13,37 @@ fn main() {
         .lines()
         .fold(0, |cksum, line| {
             let line = line.expect("could not read line");
-            let iter = line.split_whitespace()
+            let digits_iter = line.split_whitespace()
                 .map(|s| s.parse::<u32>().expect("could not parse input"));
+            cksum +
             match part {
                 Part::One => {
-                    let (min, max) = iter.fold((None, None), |(min, max), i| {
+                    let (min, max) = digits_iter.fold((None, None), |(min, max), i| {
                         (if i <= min.unwrap_or(i) { Some(i) } else { min },
                          if i >= max.unwrap_or(i) { Some(i) } else { max })
                     });
-                    cksum + max.unwrap_or(0) - min.unwrap_or(0)
+                    max.unwrap_or(0) - min.unwrap_or(0)
                 }
                 Part::Two => {
-                    let numbers = iter.collect::<Vec<_>>();
-                    let quotient = numbers.iter()
+                    // Collect the digits so we can iter over the vector multiple times
+                    let numbers = digits_iter.collect::<Vec<_>>();
+                    numbers.iter()
                         .enumerate()
                         .map(|(i, a)| {
+                            // Check a agienst the rest of the list
                             numbers.iter()
                                 .skip(i + 1)
-                                .map(|b| if a % b == 0 {
-                                    Some(a / b)
-                                } else if b % a == 0 {
-                                    Some(b / a)
-                                } else {
-                                    None
+                                .map(|b| match (a % b, b % a) {
+                                    (0, _) => Some(a / b),
+                                    (_, 0) => Some(b / a),
+                                    _ => None,
                                 })
                                 .find(|q| q.is_some())
                                 .unwrap_or(None)
                         })
                         .find(|q| q.is_some())
-                        .unwrap_or(None);
-                    cksum + quotient.unwrap_or(0)
+                        .unwrap_or(None)
+                        .unwrap_or(0)
                 }
             }
         });
