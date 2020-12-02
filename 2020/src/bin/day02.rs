@@ -1,9 +1,5 @@
 use anyhow::Result;
 
-use combine::parser::char::*;
-use combine::stream::easy;
-use combine::*;
-
 const INPUT: &'static str = include_str!("day02.txt");
 
 fn main() -> Result<()> {
@@ -29,6 +25,7 @@ fn part1(input: &str) -> usize {
         .filter(|(min, max, count)| count >= min && count <= max)
         .count()
 }
+
 fn part2(input: &str) -> usize {
     input
         .lines()
