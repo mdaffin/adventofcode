@@ -12,51 +12,29 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-#[derive(Debug)]
+#[derive(Debug, parse_display::Display, parse_display::FromStr)]
+#[display("{min}-{max} {letter}: {password}")]
 struct Input {
     min: usize,
     max: usize,
-    search_char: char,
+    letter: char,
     password: String,
 }
 
 fn part1(input: &str) -> usize {
     input
         .lines()
-        .map(|i| line_parser(i))
-        .map(|i| (i.min, i.max, i.password.matches(i.search_char).count()))
+        .map(|i| i.parse::<Input>().unwrap())
+        .map(|i| (i.min, i.max, i.password.matches(i.letter).count()))
         .filter(|(min, max, count)| count >= min && count <= max)
         .count()
 }
 fn part2(input: &str) -> usize {
     input
         .lines()
-        .map(|i| line_parser(i))
-        .map(|i| (i.search_char, i.password.chars().nth(i.min - 1), i.password.chars().nth(i.max - 1)))
-        .map(|(search_char, a, b)| (Some(search_char) == a, Some(search_char) == b))
+        .map(|i| i.parse::<Input>().unwrap())
+        .map(|i| (i.letter, i.password.chars().nth(i.min - 1), i.password.chars().nth(i.max - 1)))
+        .map(|(letter, a, b)| (Some(letter) == a, Some(letter) == b))
         .filter(|(a, b)| a ^ b)
         .count()
-}
-
-fn line_parser(input: &str) -> Input {
-    let integer =
-        || spaces().with(many1(digit()).map(|string: String| string.parse::<usize>().unwrap()));
-    let range = || spaces().with((integer(), char('-'), integer()).map(|(min, _, max)| (min, max)));
-    let search_letter = || spaces().with((letter(), char(':')).map(|l| l.0));
-    let password = || spaces().with(many1(letter()));
-
-    let line = || {
-        (range(), search_letter(), password()).map(|((min, max), search_char, password)| Input {
-            min,
-            max,
-            search_char,
-            password,
-        })
-    };
-
-    let (line, remaining): (Input, &str) = line().easy_parse(input).unwrap();
-    if remaining.len() > 0 {
-        panic!("tailing input found")
-    }
-    line
 }
