@@ -1,11 +1,8 @@
-use anyhow::Result;
-
 const INPUT: &'static str = include_str!("day02.txt");
 
-fn main() -> Result<()> {
+fn main() {
     println!("Part 1: {}", part1(INPUT));
     println!("Part 2: {}", part2(INPUT));
-    Ok(())
 }
 
 #[derive(Debug, parse_display::Display, parse_display::FromStr)]
