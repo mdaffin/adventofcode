@@ -1,5 +1,5 @@
 [package]
-name = "aoc-2020"
+name = "adventofcode"
 version = "0.1.0"
 authors = ["Michael Daffin <michael@daffin.io>"]
 edition = "2018"
@@ -9,3 +9,6 @@ edition = "2018"
 [dependencies]
 anyhow = "1.0.34"
 itertools = "0.9.0"
+
+[lib]
+proc-macro = true
