@@ -5,11 +5,11 @@ fn main() {
     println!("Part 2: {}", part2(INPUT));
 }
 
-fn check_slope(input: &str, right: usize, down: usize) -> usize {
-    let len = input.lines().next().unwrap().chars().count();
+fn number_of_trees_for(slope: &str, right: usize, down: usize) -> usize {
+    let len = slope.lines().next().unwrap().chars().count();
 
     let mut x = 0;
-    input
+    slope
         .lines()
         .enumerate()
         .filter(|(index, _)| index % down == 0)
@@ -22,13 +22,13 @@ fn check_slope(input: &str, right: usize, down: usize) -> usize {
         .count()
 }
 
-fn part1(input: &str) -> usize {
-    check_slope(input, 3, 1)
+fn part1(slope: &str) -> usize {
+    number_of_trees_for(slope, 3, 1)
 }
 
-fn part2(input: &str) -> usize {
+fn part2(slope: &str) -> usize {
     [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)]
         .iter()
-        .map(|(right, down)| check_slope(input, *right, *down))
+        .map(|(right, down)| number_of_trees_for(slope, *right, *down))
         .product()
 }
