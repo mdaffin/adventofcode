@@ -6,7 +6,7 @@ fn main() {
 }
 
 fn number_of_trees_for(slope: &str, right: usize, down: usize) -> usize {
-    let len = slope.lines().next().unwrap().chars().count();
+    let line_len = slope.lines().next().unwrap().chars().count();
 
     let mut x = 0;
     slope
@@ -15,7 +15,7 @@ fn number_of_trees_for(slope: &str, right: usize, down: usize) -> usize {
         .filter(|(index, _)| index % down == 0)
         .map(|(_, line)| {
             let cur_x = x;
-            x = (x + right) % len;
+            x = (x + right) % line_len;
             line.chars().nth(cur_x).unwrap()
         })
         .filter(|&c| c == '#')
