@@ -27,7 +27,13 @@ fn part2(input: &str) -> usize {
     input
         .lines()
         .map(|i| i.parse::<Input>().unwrap())
-        .map(|i| (i.letter, i.password.chars().nth(i.min - 1), i.password.chars().nth(i.max - 1)))
+        .map(|i| {
+            (
+                i.letter,
+                i.password.chars().nth(i.min - 1),
+                i.password.chars().nth(i.max - 1),
+            )
+        })
         .map(|(letter, a, b)| (Some(letter) == a, Some(letter) == b))
         .filter(|(a, b)| a ^ b)
         .count()
