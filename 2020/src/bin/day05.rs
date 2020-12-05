@@ -23,18 +23,13 @@ fn part2(input: &str) -> u32 {
 }
 
 fn to_seat_id(key: &str) -> u32 {
-    let row = to_number(&key[..7], 'F');
-    let column = to_number(&key[7..], 'L');
-    row * 8 + column
-}
-
-fn to_number(key: &str, zero: char) -> u32 {
     key.chars()
-        .rev()
-        .map(|c| if c == zero { 0 } else { 1 })
-        .enumerate()
-        .map(|(i, c)| c << i)
-        .sum()
+        .map(|c| match c {
+            'F' | 'L' => 0,
+            'B' | 'R' => 1,
+            _ => panic!("invalid character in ticket"),
+        })
+        .fold(0, |acc, n| (acc << 1) + n)
 }
 
 #[cfg(test)]
@@ -50,20 +45,6 @@ mod tests {
     #[test]
     fn part2_actual() {
         assert_eq!(part2(INPUT), 597);
-    }
-
-    #[test_case("BFFFBBF", 70)]
-    #[test_case("FFFBBBF", 14)]
-    #[test_case("BBFFBBF", 102)]
-    fn decode_seat_row(seat: &str, row: u32) {
-        assert_eq!(to_number(seat, 'F'), row)
-    }
-
-    #[test_case("RRR", 7)]
-    #[test_case("LLL", 0)]
-    #[test_case("RLL", 4)]
-    fn decode_seat_column(seat: &str, column: u32) {
-        assert_eq!(to_number(seat, 'L'), column)
     }
 
     #[test_case("BFFFBBFRRR", 567)]
