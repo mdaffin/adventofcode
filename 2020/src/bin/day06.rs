@@ -39,7 +39,7 @@ fn part2(input: &str) -> usize {
                 .filter(|&&count| count == number_of_people)
                 .count()
         })
-        .sum::<usize>()
+        .sum()
 }
 
 #[cfg(test)]
