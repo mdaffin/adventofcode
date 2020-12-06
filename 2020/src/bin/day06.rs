@@ -28,7 +28,7 @@ fn part2(input: &str) -> usize {
         .trim()
         .split("\n\n")
         .map(|group| {
-            let number_of_people = group.trim().chars().filter(is_newline).count() + 1;
+            let number_of_people = group.trim().lines().count();
             let grouped_answers = group
                 .chars()
                 .filter(|c| !is_newline(c))
