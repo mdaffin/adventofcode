@@ -19,24 +19,24 @@ fn part2(input: &str) -> usize {
     const ALPHABET_LENGTH: usize = 26;
 
     let is_newline = |&c: &char| c == '\n';
-    let is_not_newline = |&c: &char| c != '\n';
+    let group_answers = |mut answers: [_; ALPHABET_LENGTH], c| {
+        answers[c as usize - 'a' as usize] += 1;
+        answers
+    };
 
     input
         .trim()
         .split("\n\n")
         .map(|group| {
             let number_of_people = group.trim().chars().filter(is_newline).count() + 1;
-            let grouped_answers =
-                group
-                    .chars()
-                    .filter(is_not_newline)
-                    .fold([0; ALPHABET_LENGTH], |mut acc, c| {
-                        acc[c as usize - 'a' as usize] += 1;
-                        acc
-                    });
+            let grouped_answers = group
+                .chars()
+                .filter(|c| !is_newline(c))
+                .fold([0; ALPHABET_LENGTH], group_answers);
             grouped_answers
                 .iter()
-                .filter(|&&count| count >= number_of_people)
+                .inspect(|&&count| assert!(count <= number_of_people))
+                .filter(|&&count| count == number_of_people)
                 .count()
         })
         .sum::<usize>()
